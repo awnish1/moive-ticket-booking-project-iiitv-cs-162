@@ -63,18 +63,28 @@
                 location: document.getElementById("location").value
             };
 
-            const response = await fetch("https://movie-mania-cmg2.onrender.com", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
-            });
+        const API_BASE_URL = "https://movie-mania-cmg2.onrender.com";
 
-            const data = await response.json();
-            alert(data.message);
+        const response = await fetch(`${API_BASE_URL}/register`, {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+        },
+    body: JSON.stringify(formData)
+    });
+const data = await response.json();
 
-            if (response.status===201) {
-                window.location.href = "login.html";
-            }
+if (!response.ok) {
+
+    alert(data.message || "Registration failed");
+
+    return;
+
+}
+
+alert(data.message);
+
+window.location.href = "login.html";
         });
     </script>
 </body>
