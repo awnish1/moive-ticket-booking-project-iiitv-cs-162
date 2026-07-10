@@ -1,0 +1,236 @@
+/* public/seating.css */
+
+/* Basic Reset & Body Style */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1d24; /* Dark background */
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Main Container */
+.seating-container {
+    background-color: #2c303a; /* Slightly lighter container */
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 650px; /* Adjust as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Movie Info Header */
+.movie-info {
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+.movie-info h1 {
+    font-size: 1.8em;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+.movie-info p {
+    font-size: 1em;
+    color: #bdbdbd;
+}
+.back-btn { /* Style for the back link */
+    color: #ff9f1c; /* Theme color */
+    text-decoration: none;
+    font-size: 0.9em;
+    display: inline-block; /* Allow margin */
+    margin-top: 10px;
+}
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* Legend Styling */
+.legend {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between items */
+    padding: 15px 0;
+    margin-bottom: 25px;
+    width: 100%;
+    border-bottom: 1px solid #444;
+    border-top: 1px solid #444;
+}
+.legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between seat example and text */
+}
+.legend .seat.example {
+    width: 18px; /* Size for legend examples */
+    height: 15px;
+    cursor: default; /* Not clickable */
+    margin: 0; /* Remove margin for legend items */
+    box-shadow: none; /* Remove shadow for legend items */
+}
+.legend small {
+    color: #ccc;
+    font-size: 0.9em;
+}
+
+/* Screen Styling */
+.screen {
+    background-color: #4a4e5a; /* Darker screen */
+    height: 8px; /* Thinner screen line */
+    width: 70%;
+    margin: 0 auto 30px auto; /* Center and add space below */
+    border-radius: 5px;
+    box-shadow: 0 3px 8px rgba(255, 255, 255, 0.1);
+    position: relative;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.8em;
+    line-height: 0; /* Adjust text position */
+    padding-top: 12px; /* Push text below the line */
+    letter-spacing: 2px;
+}
+
+/* Seats Area & Rows */
+.seats-area {
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    gap: 10px; /* Space between rows */
+    margin-bottom: 25px;
+    /* Optional: Add perspective for a slight 3D effect */
+    /* perspective: 1000px; */
+}
+
+.row {
+    display: flex;
+    justify-content: center; /* Center seats in the row */
+    gap: 8px; /* Space between seats */
+}
+
+/* Individual Seat Styling */
+.seat {
+    background-color: #62656f; /* Default available color */
+    height: 20px; /* Seat dimensions */
+    width: 25px;
+    margin: 3px;
+    border-radius: 5px 5px 2px 2px; /* Slightly curved top */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Different Seat States */
+.seat.available:not(.occupied):hover {
+    cursor: pointer;
+    background-color: #8a8d95; /* Lighter grey on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.seat.selected {
+    background-color: #ff9f1c; /* Theme accent color for selected */
+}
+.seat.selected:hover {
+     transform: scale(1.1); /* Still allow hover effect */
+}
+
+.seat.occupied {
+    background-color: #44474f; /* Darker, low-contrast for occupied */
+    cursor: not-allowed;
+}
+
+/* Prevent hover effect on occupied seats */
+.seat.occupied:hover {
+    transform: scale(1); /* No scaling */
+    background-color: #44474f; /* Keep color the same */
+}
+
+
+/* Booking Summary */
+.booking-summary {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #444;
+    width: 100%;
+    text-align: center;
+    color: #ccc;
+}
+.booking-summary p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+.booking-summary span {
+    font-weight: bold;
+    color: #ffc977; /* Lighter accent color */
+}
+
+/* Confirmation Button */
+.confirm-btn {
+    background-color: #cd8c38; /* Match theme button */
+    color: #1e1f26;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px; /* Pill shape */
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 80%; /* Make button wider */
+    margin-top: 10px;
+}
+.confirm-btn:hover:not(:disabled) {
+    background-color: #b87b2a; /* Darker hover */
+    transform: scale(1.02);
+}
+.confirm-btn:disabled {
+    background-color: #555; /* Grey out when disabled */
+    cursor: not-allowed;
+    transform: scale(1); /* No hover effect */
+}
+
+
+/* Add basic responsiveness if needed */
+@media (max-width: 480px) {
+    .seating-container {
+        padding: 20px 15px;
+    }
+    .seat {
+        height: 16px;
+        width: 20px;
+        margin: 2px;
+    }
+     .row {
+        gap: 5px;
+    }
+     .legend {
+        gap: 10px;
+        flex-wrap: wrap; /* Allow legend to wrap */
+        justify-content: space-around;
+    }
+    .legend li {
+        gap: 5px;
+    }
+    .legend .seat.example {
+        width: 15px;
+        height: 12px;
+    }
+    .legend small {
+        font-size: 0.8em;
+    }
+    .confirm-btn {
+        width: 100%;
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+}

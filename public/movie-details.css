@@ -1,0 +1,392 @@
+/* public/movie-details.css */
+
+/* ======================================== */
+/* == General & Layout == */
+/* ======================================== */
+
+/* Inherit base styles if style.css is linked, otherwise define basics */
+body {
+    background-color: #1e1f26; /* Match index.html background */
+    color: #adadad;            /* Default text color */
+    font-family: 'Joan', serif; /* Or your preferred font */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 3rem; /* Add some padding at the bottom */
+}
+
+/* Container for the back button */
+.back-button-container {
+    padding: 1rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto; /* Center container */
+}
+
+.back-btn {
+    color: #cd8c38; /* Theme color */
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+/* Main containers for content sections */
+.movie-details-container,
+.selection-container,
+.theater-display-container, /* For theater listing */
+.showtimes-container {
+    max-width: 1100px;
+    margin: 1.5rem auto; /* Spacing between sections */
+    padding: 1.5rem 2rem;
+    background-color: rgba(42, 43, 51, 0.85); /* Slightly darker/less transparent background */
+    backdrop-filter: blur(5px); /* Optional: Frosted glass effect */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Section Headings */
+.selection-container h2,
+.theater-display-container h2,
+.showtimes-container h2 {
+    color: #ffffff;
+    margin-top: 0; /* Remove default top margin */
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #555; /* Slightly more visible border */
+    padding-bottom: 0.6rem;
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+/* Loading and Error Messages */
+.loading-message {
+    color: #ccc;
+    text-align: center;
+    padding: 1.5rem;
+    font-style: italic;
+}
+.error-message {
+    color: #e74c3c; /* Red for errors */
+    font-weight: bold;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+/* ======================================== */
+/* == Movie Details Section == */
+/* ======================================== */
+
+.details-content {
+    display: flex; /* Side-by-side layout for poster and info */
+    gap: 2.5rem; /* Space between poster and info */
+    flex-wrap: wrap; /* Allow stacking on smaller screens */
+}
+
+.details-poster {
+    flex: 0 0 250px; /* Fixed width, don't grow/shrink */
+    max-width: 100%; /* Ensure it doesn't overflow container on very small screens */
+}
+
+.details-poster img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 6px;
+    display: block; /* Remove extra space below image */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.details-info {
+    flex: 1; /* Take up remaining space */
+    min-width: 300px; /* Prevent getting too squished */
+}
+
+.details-info h1 {
+    color: #ffffff; /* White title */
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 2.4em; /* Larger title */
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Meta info below title (duration, cert, rating) */
+.info-meta {
+    color: #ccc;
+    font-size: 0.95em;
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    gap: 0.5rem 1rem; /* Vertical and horizontal gap */
+    align-items: center;
+}
+.info-meta span {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background */
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap; /* Prevent wrapping inside the span */
+}
+
+/* Label/Value pairs (Genre, Release Date, etc.) */
+.info-group {
+    margin-bottom: 0.9rem;
+    line-height: 1.5;
+}
+.info-group label {
+    font-weight: bold;
+    color: #e0e0e0; /* Lighter grey for labels */
+    min-width: 110px; /* Align values */
+    display: inline-block;
+    margin-right: 0.5rem; /* Space after label */
+}
+.info-group span {
+    color: #bdbdbd; /* Slightly dimmer for values */
+}
+
+/* Movie description/synopsis */
+.details-info p#movie-description {
+    margin: 1.5rem 0;
+    color: #bdbdbd;
+    line-height: 1.7; /* More spacing for readability */
+}
+
+/* Watch Trailer Button (uses .btn style from style.css) */
+#watch-trailer-btn {
+    margin-top: 1rem;
+    display: inline-block; /* Needed if not already */
+    padding: 0.7rem 1.5rem; /* Adjust padding */
+}
+
+/* ======================================== */
+/* == Selection Section (Date, Lang/Format, Location) == */
+/* ======================================== */
+
+.selection-container {
+    display: grid; /* Use grid for better alignment */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 1.5rem 2rem; /* Row and column gap */
+}
+/* Container for the buttons/dropdown */
+#date-options,
+#lang-format-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem; /* Gap between buttons */
+    min-height: 40px; /* Prevent container collapsing when empty */
+}
+
+/* Styling for individual selection buttons */
+.date-btn, .lang-format-btn {
+    background-color: #4a4a4a; /* Darker grey */
+    color: #f0f0f0;
+    border: 1px solid #666;
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+    text-align: center;
+    line-height: 1.3;
+    font-size: 0.9em;
+    flex-grow: 0; /* Don't allow stretching initially */
+}
+.date-btn:hover, .lang-format-btn:hover {
+    background-color: #5a5a5a;
+    border-color: #888;
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+/* Active state for selected buttons */
+.date-btn.active, .lang-format-btn.active {
+    background-color: #cd8c38; /* Theme accent color */
+    color: #1e1f26; /* Dark text on accent */
+    border-color: #b87b2a; /* Darker border for accent */
+    font-weight: bold;
+    transform: translateY(0); /* Reset lift */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Inner shadow */
+}
+
+/* Location Dropdown Styling */
+#location-select {
+    width: 100%; /* Full width of its container */
+    padding: 0.8rem 1rem; /* Slightly larger padding */
+    background-color: #444;
+    color: #eee;
+    border: 1px solid #666;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit; /* Use body font */
+    cursor: pointer;
+    appearance: none; /* Remove default OS dropdown arrow */
+     /* Add custom arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 0.7em auto;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+#location-select:focus {
+    outline: none;
+    border-color: #cd8c38;
+    box-shadow: 0 0 5px rgba(205, 140, 56, 0.5);
+}
+
+/* ======================================== */
+/* == Theater Display Section == */
+/* ======================================== */
+
+/* Container where theater list items appear */
+#theater-list {
+    min-height: 40px; /* Prevent collapsing */
+    margin-top: 1rem; /* Space above the first theater */
+}
+/* Instruction text within the theater list area */
+#theater-instructions {
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.95em;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Styling for each theater group/item in the list */
+.theater-group {
+    padding: 1rem 0.8rem; /* Padding inside each theater block */
+    margin-bottom: 0.8rem; /* Space between theater blocks */
+    border-bottom: 1px solid #4a4a4a; /* Separator line */
+    cursor: pointer; /* Indicate it's clickable */
+    transition: background-color 0.2s ease, border-left-color 0.2s ease; /* Add border transition */
+    border-radius: 4px;
+    border-left: 4px solid transparent; /* Start with transparent left border */
+}
+.theater-group:last-child {
+    border-bottom: none; /* Remove border from last item */
+}
+.theater-group:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle highlight on hover */
+}
+/* Style for the currently selected theater */
+.theater-group.selected {
+    background-color: rgba(205, 140, 56, 0.1); /* Theme color highlight */
+    border-left-color: #cd8c38; /* Accent border on the left */
+}
+/* Theater Name */
+.theater-group h3 {
+    color: #f0f0f0; /* Brighter theater name */
+    margin: 0 0 0.3rem 0; /* Adjust spacing */
+    font-size: 1.2em;
+    font-weight: 500;
+}
+/* Theater Address */
+.theater-address {
+    font-size: 0.9em;
+    color: #a0a0a0;
+    margin-bottom: 0; /* Reduce space below address */
+    font-style: italic;
+}
+
+
+/* ======================================== */
+/* == Showtimes Section == */
+/* ======================================== */
+
+#showtime-instructions {
+    color: #aaa;
+    margin-bottom: 1.5rem; /* More space below instructions */
+    font-style: italic;
+    font-size: 0.95em;
+    text-align: center;
+}
+#showtimes-list {
+    min-height: 40px; /* Prevent collapsing when empty/loading */
+    margin-top: 1rem; /* Space above showtime buttons */
+}
+/* Container for the time buttons within the list */
+.showtime-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem; /* Consistent gap */
+}
+
+/* Individual showtime button */
+.showtime-btn {
+    background-color: #3f3f3f;
+    color: #e8e8e8;
+    border: 1px solid #5f5f5f;
+    padding: 0.6rem 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    font-size: 1em; /* Slightly larger time font */
+}
+.showtime-btn:hover {
+    background-color: #555;
+    transform: translateY(-1px);
+}
+.showtime-btn:disabled {
+    background-color: #2f2f2f; /* Darker disabled */
+    color: #777;
+    cursor: not-allowed;
+    border-color: #4f4f4f;
+    text-decoration: line-through; /* Indicate sold out */
+    transform: translateY(0);
+}
+.showtime-btn:disabled:hover {
+    background-color: #2f2f2f; /* No hover effect when disabled */
+}
+
+/* ======================================== */
+/* == Responsive Adjustments == */
+/* ======================================== */
+
+@media (max-width: 768px) {
+    /* Stack poster/info and selection sections on smaller screens */
+    .details-content {
+        flex-direction: column;
+        gap: 1.5rem; /* Adjust gap for stacked layout */
+    }
+    .selection-container {
+        grid-template-columns: 1fr; /* Ensure selection stacks cleanly */
+    }
+    .details-poster {
+        flex-basis: auto; /* Allow poster width to adjust */
+        max-width: 300px; /* Limit max width */
+        margin: 0 auto 1rem auto; /* Center poster when stacked */
+    }
+    .details-info {
+         min-width: unset; /* Remove min-width when stacked */
+    }
+}
+
+@media (max-width: 600px) {
+    /* Center align text in info section */
+     .details-info {
+        text-align: center;
+     }
+    /* Stack labels and values */
+    .info-group label, .info-group span {
+        display: block;
+        min-width: auto; /* Remove min-width */
+        text-align: center;
+    }
+    .info-group label {
+        margin-bottom: 0.2rem;
+    }
+    /* Adjust padding for main sections */
+    .movie-details-container, .selection-container, .theater-display-container, .showtimes-container {
+        padding: 1rem 1.5rem;
+    }
+    .details-info h1 {
+        font-size: 2em; /* Slightly smaller title */
+    }
+    .back-button-container {
+        padding: 0.8rem 1.5rem;
+    }
+    /* Make buttons slightly smaller */
+    .date-btn, .lang-format-btn, .theater-btn, .showtime-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85em;
+    }
+    /* Ensure dropdown looks okay */
+    #location-select {
+        font-size: 0.95em;
+    }
+}

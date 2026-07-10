@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Booking Confirmation</title>
+    <link rel="stylesheet" href="ticket.css">
+    </head>
+<body>
+    <div class="ticket-container">
+        <div id="ticket-banner">
+            <a href="index.html" id="ticket-back-button">←</a>
+            <div class="banner-overlay">
+                <h1 id="ticket-movie-title-overlay">Movie Title</h1>
+                </div>
+             </div>
+
+        <div class="ticket-content-area">
+            <div id="ticket-details">
+                <p id="loading-message" class="status-message">Loading ticket details...</p>
+                <div id="error-message-area"></div>
+
+                <div id="booking-info" class="detail-section" style="display: none;">
+                     <h3>Booking Details</h3>
+                     <p><span class="label">Confirmation ID:</span> <span id="ticket-booking-id"></span></p>
+                     <p><span class="label">Booked For:</span> <span id="ticket-user-name"></span> (<span id="ticket-user-email"></span>)</p>
+                     <p><span class="label">Booked On:</span> <span id="ticket-booking-time"></span></p>
+                </div>
+
+                 <div id="show-info" class="detail-section" style="display: none;">
+                     <h3>Show Information</h3>
+                     <p><span class="label">Theater:</span> <span id="ticket-theater-name"></span></p>
+                     <p><span class="label">Location:</span> <span id="ticket-theater-location"></span></p>
+                     <p><span class="label">Date:</span> <span id="ticket-booking-date"></span></p>
+                     <p><span class="label">Showtime Slot:</span> <span id="ticket-showtime-slot"></span></p>
+                     <p><span class="label">Language/Format:</span> <span id="ticket-lang-format"></span></p>
+
+                 </div>
+
+                 <div id="seat-info" class="detail-section" style="display: none;">
+                     <h3>Seat Information</h3>
+                     <p><span class="label">Seats:</span> <span id="ticket-seats-list"></span></p>
+                     <p><span class="label">Quantity:</span> <span id="ticket-seat-count"></span></p>
+                 </div>
+
+                 <div id="payment-info" class="detail-section" style="display: none;">
+                    <h3>Payment Summary</h3>
+                    <p class="ticket-price"><span class="label">Total Price:</span> <span class="price-value">₹<span id="ticket-total-price"></span></span></p>
+                 </div>
+
+                 <div class="ticket-actions" style="display: none;">
+                     <a href="index.html" class="action-button">Back to Home</a>
+                     </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="ticket.js"></script>
+</body>
+</html>

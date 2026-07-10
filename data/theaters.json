@@ -1,0 +1,77 @@
+[
+  {
+    "name": "PVR Phoenix Marketcity",
+    "location": "Bengaluru",
+    "address": "Phoenix Marketcity Mall, Whitefield Main Road, Bengaluru"
+  },
+  {
+    "name": "INOX Garuda Mall",
+    "location": "Bengaluru",
+    "address": "Garuda Mall, Magrath Road, Bengaluru"
+  },
+  {
+    "name": "Cinepolis Nexus Shantiniketan",
+    "location": "Bengaluru",
+    "address": "Nexus Shantiniketan Mall, Whitefield, Bengaluru"
+  },
+  {
+    "name": "PVR Select Citywalk",
+    "location": "New Delhi",
+    "address": "Select Citywalk Mall, Saket, New Delhi"
+  },
+  {
+    "name": "Cinepolis Pacific Mall",
+    "location": "New Delhi",
+    "address": "Pacific Mall, Tagore Garden, New Delhi"
+  },
+  {
+    "name": "PVR Lulu Mall",
+    "location": "Lucknow",
+    "address": "Lulu Mall, Amar Shaheed Path, Lucknow"
+  },
+  {
+    "name": "PVR Elante Mall",
+    "location": "Chandigarh",
+    "address": "Elante Mall, Industrial Area Phase I, Chandigarh"
+  },
+  {
+    "name": "INOX South City Mall",
+    "location": "Kolkata",
+    "address": "South City Mall, Prince Anwar Shah Road, Kolkata"
+  },
+  {
+    "name": "PVR VR Chennai",
+    "location": "Chennai",
+    "address": "VR Mall, Anna Nagar, Chennai"
+  },
+  {
+    "name": "INOX Marina Mall",
+    "location": "Chennai",
+    "address": "Marina Mall, Old Mahabalipuram Road, Chennai"
+  },
+  {
+    "name": "PVR ICON Phoenix Palladium",
+    "location": "Mumbai",
+    "address": "Phoenix Palladium Mall, Lower Parel, Mumbai"
+  },
+  {
+    "name": "INOX R City",
+    "location": "Mumbai",
+    "address": "R City Mall, Ghatkopar West, Mumbai"
+  },
+  {
+    "name": "Cinepolis Viviana Mall",
+    "location": "Thane",
+    "address": "Viviana Mall, Eastern Express Highway, Thane"
+  },
+  {
+    "name": "PVR Ambience Mall",
+    "location": "Gurugram",
+    "address": "Ambience Mall, NH-48, Gurugram"
+  },
+  {
+    "name": "INOX GVK One",
+    "location": "Hyderabad",
+    "address": "GVK One Mall, Banjara Hills, Hyderabad"
+  }
+]

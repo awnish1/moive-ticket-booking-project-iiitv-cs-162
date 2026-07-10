@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats</title>
+    <link rel="stylesheet" href="seating.css">
+</head>
+<body>
+
+    <div class="seating-container">
+        <div class="movie-info">
+            <h1 id="movie-title">Loading...</h1>
+            <p id="showtime-info">Loading...</p>
+            <a href="#" id="back-link" class="back-btn" style="display: none;">← Back</a>
+        </div>
+
+        <ul class="legend">
+            <li> <div class="seat available example"></div> <small>Available</small> </li>
+            <li> <div class="seat selected example"></div> <small>Selected</small> </li>
+            <li> <div class="seat occupied example"></div> <small>Occupied</small> </li>
+        </ul>
+
+        <div class="screen">SCREEN</div>
+
+        <div id="seat-status-area" style="width: 100%; text-align: center; min-height: 2em;">
+            </div>
+
+        <div class="seats-area">
+            <div class="row">
+                <div class="seat" data-seat-id="A1"></div> <div class="seat" data-seat-id="A2"></div>
+                <div class="seat" data-seat-id="A3"></div> <div class="seat" data-seat-id="A4"></div>
+                <div class="seat" data-seat-id="A5"></div> <div class="seat" data-seat-id="A6"></div>
+                <div class="seat" data-seat-id="A7"></div> <div class="seat" data-seat-id="A8"></div>
+            </div>
+            <div class="row">
+                <div class="seat" data-seat-id="B1"></div> <div class="seat" data-seat-id="B2"></div>
+                <div class="seat" data-seat-id="B3"></div> <div class="seat" data-seat-id="B4"></div>
+                <div class="seat" data-seat-id="B5"></div> <div class="seat" data-seat-id="B6"></div>
+                <div class="seat" data-seat-id="B7"></div> <div class="seat" data-seat-id="B8"></div>
+            </div>
+            <div class="row">
+                <div class="seat" data-seat-id="F1"></div> <div class="seat" data-seat-id="F2"></div>
+                <div class="seat" data-seat-id="F3"></div> <div class="seat" data-seat-id="F4"></div>
+                <div class="seat" data-seat-id="F5"></div> <div class="seat" data-seat-id="F6"></div>
+                <div class="seat" data-seat-id="F7"></div> <div class="seat" data-seat-id="F8"></div>
+            </div>
+            <div class="row">
+                <div class="seat" data-seat-id="G1"></div> <div class="seat" data-seat-id="G2"></div>
+                <div class="seat" data-seat-id="G3"></div> <div class="seat" data-seat-id="G4"></div>
+                <div class="seat" data-seat-id="G5"></div> <div class="seat" data-seat-id="G6"></div>
+                <div class="seat" data-seat-id="G7"></div> <div class="seat" data-seat-id="G8"></div>
+            </div>
+            <div class="row">
+                <div class="seat" data-seat-id="H1"></div> <div class="seat" data-seat-id="H2"></div>
+                <div class="seat" data-seat-id="H3"></div> <div class="seat" data-seat-id="H4"></div>
+                <div class="seat" data-seat-id="H5"></div> <div class="seat" data-seat-id="H6"></div>
+                <div class="seat" data-seat-id="H7"></div> <div class="seat" data-seat-id="H8"></div>
+            </div>
+            <div class="row">
+                <div class="seat" data-seat-id="H1"></div> <div class="seat" data-seat-id="H2"></div>
+                <div class="seat" data-seat-id="H3"></div> <div class="seat" data-seat-id="H4"></div>
+                <div class="seat" data-seat-id="H5"></div> <div class="seat" data-seat-id="H6"></div>
+                <div class="seat" data-seat-id="H7"></div> <div class="seat" data-seat-id="H8"></div>
+            </div>
+            <div class="row">
+                <div class="seat" data-seat-id="I1"></div> <div class="seat" data-seat-id="I2"></div>
+                <div class="seat" data-seat-id="I3"></div> <div class="seat" data-seat-id="I4"></div>
+                <div class="seat" data-seat-id="I5"></div> <div class="seat" data-seat-id="I6"></div>
+            </div>
+        </div><div class="booking-summary">
+            <p>Selected Seats: <span id="selected-seats-list">None</span></p>
+            <p>Total Price: ₹<span id="total-price">0</span></p>
+            <button id="confirm-booking-btn" class="confirm-btn" disabled>Confirm Booking</button>
+        </div>
+
+    </div> <script src="seating.js"></script>
+
+</body>
+</html>

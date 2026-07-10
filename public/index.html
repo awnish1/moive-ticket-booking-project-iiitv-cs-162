@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Movie Mania - Movie Booking</title>
+    <style>
+        /* Styling for loggout */
+        .logout-btn { background-color: #dc3545; border: none; padding: .5rem 1rem; border-radius: 2rem; color: white; cursor: pointer; transition: .3s; margin-left: 1rem; font-size: inherit; font-family: inherit; line-height: normal; vertical-align: middle; }
+        .logout-btn:hover { background-color: #c82333; transform: scale(1.05); }
+
+        /* Styling for messages within the movie container */
+        .movies-container .message { color: #ccc; text-align: center; padding: 2rem; font-size: 1.1em; width: 100%; grid-column: 1 / -1; /* Span grid columns */ }
+        .movies-container .error-message { color: #dc3545; }
+
+        /* Styling for clickable movie card */
+        .current-movie { cursor: pointer; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+        .current-movie:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); }
+
+        /* Basic input/label styling for sidebar */
+         .sidebar input[type="checkbox"], .sidebar input[type="radio"] { margin-right: 0.3rem; margin-bottom: 0.6rem; /* Added bottom margin */ vertical-align: middle; accent-color: #cd8c38; }
+         .sidebar label { vertical-align: middle; line-height: 1.5; /* Align label better with checkbox */ }
+         .sidebar-groups { margin-bottom: 1.5rem; }
+         .sg-title { color: #fff; margin-bottom: 0.8rem; font-size: 1.1em; border-bottom: 1px solid rgba(205, 140, 56, 0.3); padding-bottom: 0.4rem; }
+
+         /* Styling for booking area buttons */
+         .booking { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; gap: 0.5rem; /* Add gap between price and buttons */ flex-wrap: wrap; /* Allow buttons to wrap if needed */ }
+         .booking .price { color: #cd8c38; font-size: 1.4em; flex-shrink: 0; /* Prevent price from shrinking */}
+         .booking .btn, .booking .btn-alt { margin-left: 0.5rem; flex-shrink: 0; /* Prevent buttons shrinking */}
+         /* Adjust button group alignment if needed */
+         .booking > div { display: flex; align-items: center; }
+
+    </style>
+</head>
+<body>
+    <section class="top-bar">
+        <div class="left-content">
+            <h2 class="title">Movie Mania</h2>
+            <ul class="navigation">
+                <li><a class="active" href="index.html">Home</a></li>
+                <li><a href="index.html">Movies</a></li>
+                <li><a href="order.html">Find Booking</a></li>
+            </ul>
+        </div>
+        <div class="right-content">
+            <a href="login.html" class="login-btn btn" id="loginButton" style="display: none;">Login</a>
+            <button id="logoutButton" class="logout-btn" style="display: none;">Logout</button>
+        </div>
+    </section>
+
+    <section class="main-container">
+
+        <div class="sidebar">
+            <form action="#" id="filterForm">
+                <div class="sidebar-groups">
+                     <h3 class="sg-title">Category</h3>
+                     <input type="checkbox" id="action" name="category" value="Action"><label for="action">Action</label><br>
+                     <input type="checkbox" id="adventure" name="category" value="Adventure"><label for="adventure">Adventure</label><br>
+                     <input type="checkbox" id="animation" name="category" value="Animation"><label for="animation">Animation</label><br>
+                     <input type="checkbox" id="anime" name="category" value="Anime"><label for="anime">Anime</label><br>
+                     <input type="checkbox" id="biography" name="category" value="Biography"><label for="biography">Biography</label><br>
+                     <input type="checkbox" id="comedy" name="category" value="Comedy"><label for="comedy">Comedy</label><br>
+                     <input type="checkbox" id="crime" name="category" value="Crime"><label for="crime">Crime</label><br>
+                     <input type="checkbox" id="documentary" name="category" value="Documentary"><label for="documentary">Documentary</label><br>
+                     <input type="checkbox" id="drama" name="category" value="Drama"><label for="drama">Drama</label><br>
+                     <input type="checkbox" id="family" name="category" value="Family"><label for="family">Family</label><br>
+                     <input type="checkbox" id="fantasy" name="category" value="Fantasy"><label for="fantasy">Fantasy</label><br>
+                     <input type="checkbox" id="history" name="category" value="History"><label for="history">History</label><br>
+                     <input type="checkbox" id="monster" name="category" value="Monster"><label for="monster">Monster</label><br>
+                     <input type="checkbox" id="ninja" name="category" value="Ninja"><label for="ninja">Ninja</label><br>
+                     <input type="checkbox" id="romance" name="category" value="Romance"><label for="romance">Romance</label><br>
+                     <input type="checkbox" id="science" name="category" value="Science Fiction"><label for="science">Science Fiction</label><br>
+                     <input type="checkbox" id="thriller" name="category" value="Thriller"><label for="thriller">Thriller</label><br>
+                 </div>
+
+                <div class="sidebar-groups">
+                    <h3 class="sg-title">Language</h3>
+                     <input type="checkbox" id="english" name="language" value="English"><label for="english">English</label><br>
+                    <input type="checkbox" id="hindi" name="language" value="Hindi"><label for="hindi">Hindi</label><br>
+                    <input type="checkbox" id="bhojpuri" name="language" value="Bhojpuri"><label for="bhojpuri">Bhojpuri</label><br>
+                    <input type="checkbox" id="japanese" name="language" value="Japanese"><label for="japanese">Japanese</label><br>
+                    <input type="checkbox" id="korean" name="language" value="Korean"><label for="korean">Korean</label><br>
+                    <input type="checkbox" id="telugu" name="language" value="Telugu"><label for="telugu">Telugu</label><br>
+                    <input type="checkbox" id="tamil" name="language" value="Tamil"><label for="tamil">Tamil</label><br>
+                    <input type="checkbox" id="malayalam" name="language" value="Malayalam"><label for="malayalam">Malayalam</label><br>
+                    <input type="checkbox" id="kannada" name="language" value="Kannada"><label for="kannada">Kannada</label><br>
+                    <input type="checkbox" id="spanish" name="language" value="Spanish"><label for="spanish">Spanish</label><br>
+                </div>
+            </form>
+        </div><div class="movies-container">
+            <div class="upcoming-img-box">
+    <img src="https://4kwallpapers.com/images/walls/thumbs_3t/17916.jpeg"
+         alt="Avatar: Fire and Ash">
+
+    <p class="upcoming-title">Avatar: Fire and Ash</p>
+
+    <p class="release-date">
+        Coming Soon • December 19, 2025
+    </p>
+
+    <div class="buttons">
+        <a href="#current-movies-section" class="btn">
+            Explore Movies
+        </a>
+
+        <a
+            href="https://www.youtube.com/watch?v=nb_fFj_0rq8&pp=ygUbQXZhdGFyIEZpcmUgYW5kIEFzaCBUcmFpbGVy"
+            target="_blank"
+            class="btn-alt btn">
+            Watch Trailer
+        </a>
+    </div>
+</div>
+             <h2 id="current-movies-section" style="color: #fff; margin-bottom: 1.5rem; border-bottom: 1px solid #555; padding-bottom: .6rem;">Now Showing</h2>
+            <div class="current-movies">
+                <p class="message">Loading movies...</p>
+                </div>
+        </div></section> <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginButton = document.getElementById('loginButton');
+            const logoutButton = document.getElementById('logoutButton');
+            const moviesContainer = document.querySelector('.current-movies');
+            const sidebarForm = document.getElementById('filterForm');
+            const API_BASE_URL = 'http://localhost:3000';
+
+            //Authentication Ui
+            function updateAuthUI() {
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                if(loginButton) loginButton.style.display = isLoggedIn ? 'none' : 'inline-block';
+                if(logoutButton) logoutButton.style.display = isLoggedIn ? 'inline-block' : 'none';
+            }
+
+            if(logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    localStorage.clear(); 
+                    updateAuthUI();
+                    alert('You have been logged out.');
+                });
+            }
+
+            // Movie fetching and displaay
+            async function fetchAndDisplayMovies(filters = {}) {
+                console.log("Fetching movies with filters:", filters);
+                const queryParams = new URLSearchParams();
+                if (filters.categories && filters.categories.length > 0) { filters.categories.forEach(cat => queryParams.append('categories', cat)); }
+                if (filters.languages && filters.languages.length > 0) { filters.languages.forEach(lang => queryParams.append('languages', lang)); }
+
+                const queryString = queryParams.toString();
+                const apiUrl = `${API_BASE_URL}/api/movies${queryString ? '?' + queryString : ''}`;
+                console.log("Fetching from URL:", apiUrl);
+
+                moviesContainer.innerHTML = '<p class="message">Loading movies...</p>';
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+
+                         const errorData = await response.json().catch(() => ({ message: `HTTP error ${response.status}` }));
+                         throw new Error(errorData.message || `HTTP error ${response.status}`);
+                    }
+                    const movies = await response.json();
+
+                    moviesContainer.innerHTML = ''; // Clear loading/previous results
+
+                    if (!movies || movies.length === 0) {
+                        moviesContainer.innerHTML = '<p class="message">No movies match the selected filters.</p>';
+                    } else {
+                        movies.forEach(movie => {
+                            const imageUrl = movie.imageUrl || 'assets/images/placeholder.png';
+                            const priceDisplay = typeof movie.price === 'number' ? `₹${movie.price}` : 'Info';
+                            const title = movie.title || 'Untitled Movie';
+                            const detailsUrl = `movie-details.html?id=${movie._id}`;
+
+                            // Generate the HTML for each movie card
+                            const movieCardHTML = `
+                                <div class="current-movie" data-movie-id="${movie._id}" title="View details for ${title}">
+                                    <div class="cm-img-box">
+                                        <img src="${imageUrl}" loading="lazy" alt="${title} Poster">
+                                    </div>
+                                    <h3 class="movie-title">${title}</h3>
+                                    ${movie.screen ? `<p class="screen-name">Screen: ${movie.screen}</p>` : ''}
+                                    <div class="booking">
+                                        <h2 class="price">${priceDisplay}</h2>
+                                        <div> <a href="${detailsUrl}" class="btn buy-tickets-btn">Buy Tickets</a>
+                                            ${movie.trailerUrl ? `<a href="${movie.trailerUrl}" class="btn-alt btn" target="_blank" rel="noopener noreferrer" title="Watch Trailer">Watch Trailer</a>` : ''}
+                                        </div>
+                                    </div>
+                                </div>`;
+                            moviesContainer.insertAdjacentHTML('beforeend', movieCardHTML);
+                        });
+                    }
+                    attachActionListeners();
+                } catch (error) {
+                    console.error("Failed to fetch movies:", error);
+                    moviesContainer.innerHTML = `<p class="message error-message">Could not load movies: ${error.message}</p>`;
+                }
+            }
+
+            //Filtering logic
+            function getSelectedFilters() {
+                const filters = { categories: [], languages: [] };
+                sidebarForm.querySelectorAll('input[name="category"]:checked')
+                           .forEach(cb => filters.categories.push(cb.value));
+                sidebarForm.querySelectorAll('input[name="language"]:checked')
+                           .forEach(cb => filters.languages.push(cb.value));
+                console.log("Selected Filters:", filters); // Log selected filters
+                return filters;
+            }
+
+            // Adding event listener to the form
+            sidebarForm.addEventListener('change', () => {
+                console.log("Filter form changed!");
+                const currentFilters = getSelectedFilters();
+                fetchAndDisplayMovies(currentFilters); // Fetch with new filters
+            });
+
+            //Event Listeners for Movie Cards
+             function attachActionListeners() {
+                 moviesContainer.removeEventListener('click', handleMovieContainerClick); // Use one handler
+                 moviesContainer.addEventListener('click', handleMovieContainerClick);
+             }
+
+             // Single handler for clicks inside the movie list container
+             function handleMovieContainerClick(event) {
+                 // Find the card that was clicked or contains the clicked element
+                 const movieCard = event.target.closest('.current-movie');
+                 if (!movieCard) return; // Exit if click wasn't inside a card
+
+                 const movieId = movieCard.dataset.movieId;
+                 if (!movieId) { console.error("Movie ID missing on card."); return; }
+
+                 // Check if the click was specifically on the trailer link
+                 const trailerLink = event.target.closest('a.btn-alt[target="_blank"]');
+
+                 if (!trailerLink) {
+                     if (event.target.closest('a') && event.target.closest('a') !== trailerLink) {
+                          event.preventDefault();
+                     }
+                     console.log("Navigating to details page for movie ID:", movieId);
+                     window.location.href = `movie-details.html?id=${movieId}`;
+                 } else {
+                     console.log("Trailer link clicked.");
+                 }
+            }
+
+            // Initial Load
+            updateAuthUI(); // Set initial button ui visibility
+            fetchAndDisplayMovies(); // Fetch all movies on load
+
+        }); 
+    </script>
+
+</body>
+</html>

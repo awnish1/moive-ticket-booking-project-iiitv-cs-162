@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Find Your Booking</title>
+    <style>
+        /* Basic styling for the find booking content box */
+        .find-booking-container {
+            max-width: 550px; /* Slightly adjusted width */
+            margin: 3rem auto; /* Center below top bar */
+            padding: 2.5rem 3rem; /* Adjusted padding */
+            /* Using gradient consistent with sidebar/movie cards from style.css */
+            background: linear-gradient(45deg, rgba(255, 255, 255, .05), rgba(205, 140, 56, .15));
+            backdrop-filter: blur(5px);
+            border-radius: 1rem; /* Match other rounded elements */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #eee; /* Default text color */
+        }
+        /* Heading using theme color */
+        .find-booking-container h1 {
+            color: #cd8c38;
+            margin-bottom: 1rem;
+            font-weight: 600; /* Slightly bolder */
+        }
+        /* Instruction paragraph */
+        .find-booking-container p {
+            color: #ccc;
+            margin-bottom: 2rem; /* More space before form */
+            line-height: 1.6;
+        }
+        /* Form styling */
+        #findBookingForm {
+            display: flex;
+            flex-direction: column; /* Stack label/input and button */
+            align-items: center; /* Center items if needed, though width 100% dominates */
+        }
+        /* Input group styling */
+        #findBookingForm .input-group {
+             width: 100%; /* Make group take full width */
+             text-align: left;
+             margin-bottom: 1rem;
+        }
+         #findBookingForm label {
+             color: #ccc;
+             font-size: 0.9em; /* Slightly smaller label */
+             display: block;
+             margin-bottom: 0.4rem;
+             font-weight: 500;
+         }
+         /* Input field styling consistent with theme */
+         #findBookingForm input[type="text"] {
+             width: 100%;
+             padding: 12px 15px; /* Standard padding */
+             border: 1px solid #cd8c38; /* Theme border */
+             border-radius: 6px;
+             background-color: #262626; /* Dark input background */
+             color: #fff; /* Light text */
+             font-size: 1em;
+             font-family: inherit; /* Use main font */
+             transition: border-color 0.2s, box-shadow 0.2s;
+         }
+          #findBookingForm input[type="text"]:focus {
+             outline: none;
+             border-color: #b87b2a; /* Darker theme color on focus */
+             box-shadow: 0 0 0 3px rgba(205, 140, 56, 0.3); /* Subtle glow */
+         }
+
+        /* Ensure button uses theme style and has spacing */
+        #findBookingForm .btn {
+             width: 100%; /* Make button full width */
+             margin-top: 1.5rem; /* More space above button */
+             padding: 12px;
+             font-size: 1.1em;
+             /* Inherits background, color, border-radius etc. from .btn in style.css */
+        }
+    </style>
+</head>
+<body>
+    <section class="top-bar">
+        <div class="left-content">
+            <h2 class="title">Movie+Mania</h2>
+            <ul class="navigation">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Movies</a></li>
+                <li><a href="#">Theaters</a></li>
+                <li><a href="#">News</a></li>
+                <li><a class="active" href="find-booking.html">Find Booking</a></li>
+            </ul>
+        </div>
+        <div class="right-content">
+            <a href="login.html" class="login-btn btn" id="loginButton">Login</a>
+            <button id="logoutButton" class="logout-btn" style="display: none;">Logout</button>
+             <style>.logout-btn{background-color:#dc3545;border:none;padding:.5rem 1rem;border-radius:2rem;color:white;cursor:pointer;transition:.3s;margin-left:1rem;font-size:inherit;font-family:inherit;line-height:normal;vertical-align:middle;}.logout-btn:hover{background-color:#c82333;transform:scale(1.05);}</style>
+        </div>
+    </section>
+
+    <div class="main-container"> <div class="find-booking-container">
+            <h1>Find Your Booking</h1>
+            <p>Enter the Booking ID (Confirmation Number) you received to view your ticket details.</p>
+
+            <form id="findBookingForm">
+                <div class="input-group">
+                    <label for="bookingIdInput">Booking ID</label>
+                    <input type="text" id="bookingIdInput" placeholder="e.g., 67f19428895405fcb5b91539" required>
+                </div>
+                <button type="submit" class="btn">Find My Ticket</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Elements pakdo (Grab the elements)
+        const form=document.getElementById('findBookingForm');
+        const inp=document.getElementById('bookingIdInput');
+
+        // Form submit hone par kya karna hai (What to do on form submit)
+        form.addEventListener('submit',function(ev){
+            ev.preventDefault(); // Page reload roko (Stop page reload)
+
+            const id=inp.value.trim(); // ID lelo, faltu space hatao (Get ID, remove extra space)
+
+            if(id){
+                // Agar ID hai toh ticket page pe bhejo (If ID exists, redirect to ticket page)
+                console.log(`Redirecting for ID:${id}`);
+                window.location.href=`ticket.html?bookingId=${encodeURIComponent(id)}`;
+            }else{
+                // Agar ID khaali hai toh batao (If ID is empty, inform user)
+                alert('Please enter your Booking ID.'); // Or Hinglish: 'Apna Booking ID daalo.'
+                inp.focus(); // Input field pe focus karo (Focus on input field)
+            }
+        });
+    </script>
+
+    <script>
+         // Simple Auth UI logic - Login/Logout button dikhao/chupao
+         function updUI(){
+             const lgnBtn=document.getElementById('loginButton');
+             const lgtBtn=document.getElementById('logoutButton');
+              // Check karo logged in hai ya nahi (Check if logged in or not)
+              if(localStorage.getItem('isLoggedIn')==='true'){
+                   if(lgnBtn)lgnBtn.style.display='none'; // Login chupao
+                   if(lgtBtn)lgtBtn.style.display='inline-block'; // Logout dikhao
+              }else{
+                   if(lgnBtn)lgnBtn.style.display='inline-block'; // Login dikhao
+                   if(lgtBtn)lgtBtn.style.display='none'; // Logout chupao
+              }
+         }
+         const lgtBtn=document.getElementById('logoutButton');
+         if(lgtBtn){
+             lgtBtn.addEventListener('click',()=>{
+                  // Logout par sab clear karo (Clear everything on logout)
+                  localStorage.clear();
+                  updUI(); // UI update karo
+                  alert('You have been logged out.');
+                  window.location.href='index.html'; // Home page pe jao
+             });
+         }
+         // Page load hone par UI update karo (Update UI on page load)
+         document.addEventListener('DOMContentLoaded',updUI);
+    </script>
+</body>
+</html>

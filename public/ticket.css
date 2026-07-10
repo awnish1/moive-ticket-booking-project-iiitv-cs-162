@@ -1,0 +1,178 @@
+/* public/ticket.css */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1d24; /* Dark background */
+    color: #eee;
+    line-height: 1.6;
+}
+
+.ticket-container {
+    max-width: 500px; /* Mobile-first width, adjust as needed */
+    margin: 0 auto;
+    background-color: #2c303a;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    min-height: 100vh; /* Ensure it takes full height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Banner Styling */
+#ticket-banner {
+    width: 100%;
+    height: 250px; /* Adjust height */
+    background-size: cover;
+    background-position: center 30%; /* Adjust vertical position */
+    background-repeat: no-repeat;
+    position: relative; /* For overlay and back button */
+    background-color: #333; /* Fallback */
+}
+
+#ticket-back-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.5em;
+    line-height: 1;
+    transition: background-color 0.2s;
+    z-index: 2;
+}
+#ticket-back-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.banner-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    background: linear-gradient(to top, rgba(44, 48, 58, 0.95), rgba(44, 48, 58, 0.1)); /* Gradient overlay */
+    z-index: 1;
+}
+
+#ticket-movie-title-overlay {
+    color: #fff;
+    font-size: 1.9em;
+    margin: 0;
+    line-height: 1.2;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+/* Content Area */
+.ticket-content-area {
+    padding: 1.5rem 1.5rem 2rem 1.5rem; /* Padding around details */
+    flex-grow: 1; /* Allow content to push footer down if needed */
+}
+
+.status-message { /* For loading/error */
+    text-align: center;
+    padding: 3rem 1rem;
+    font-style: italic;
+    color: #aaa;
+}
+#error-message-area .error-message { /* Style error specifically */
+     color: #e74c3c; font-weight: bold; font-style: normal;
+}
+
+.detail-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #444;
+}
+.detail-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.detail-section h3 {
+    color: #cd8c38; /* Theme color for headings */
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.detail-section p {
+    margin: 0.4rem 0;
+    font-size: 1em;
+    color: #ddd;
+    display: flex; /* For label alignment */
+    flex-wrap: wrap;
+}
+
+.detail-section p .label {
+    color: #aaa;
+    min-width: 130px; /* Adjust for alignment */
+    display: inline-block; /* Was flex - changed */
+    margin-right: 10px;
+    font-weight: 500;
+}
+.detail-section p span:not(.label) {
+    flex-grow: 1;
+}
+
+
+#ticket-seats-list {
+    font-weight: bold;
+    color: #fff;
+}
+
+.ticket-price {
+    font-size: 1.2em !important;
+    font-weight: bold;
+    color: #fff !important;
+    justify-content: flex-end; /* Align price to the right */
+}
+.ticket-price .label {
+     min-width: auto !important; /* Reset alignment for price label */
+     font-weight: bold !important;
+     color: #fff !important;
+}
+.ticket-price .price-value {
+    color: #ffc977; /* Highlight price value */
+    margin-left: 10px;
+}
+
+
+.ticket-actions {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+.action-button { /* Basic button style - can use .btn from style.css if linked */
+    display: inline-block;
+    padding: 0.8rem 1.8rem;
+    background-color: #cd8c38;
+    color: #1e1f26;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.action-button:hover {
+    background-color: #b87b2a;
+    transform: scale(1.03);
+}
+
+
+/* Responsive */
+@media (max-width: 600px) {
+    #ticket-banner { height: 200px; }
+    #ticket-movie-title-overlay { font-size: 1.6em; }
+    .ticket-content-area { padding: 1rem; }
+    .detail-section p { flex-direction: column; } /* Stack label and value */
+    .detail-section p .label { min-width: auto; margin-bottom: 3px; }
+    .ticket-price { justify-content: space-between; }
+}

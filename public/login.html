@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Movie Booking</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required autocomplete="email"> </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autocomplete="current-password"> </div>
+                <button type="submit" class="btn">Login</button>
+                <p class="register-link">Don't have an account? <a href="registration.html">Register here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit",async function(event){
+            event.preventDefault();
+            const formData={
+                email:document.getElementById("email").value,
+                password:document.getElementById("password").value
+            };
+            if(!formData.email || !formData.password){
+                alert("Plz enter Email and password");
+            }
+            try{
+                //sending request to server
+                const response=await fetch("http://localhost:3000/login",{
+                    method: "POST",
+                    headers: {"Content-Type": "application/json" },
+                    body:JSON.stringify(formData)
+                });
+
+                // parseing the JSON response body 
+                const data = await response.json();
+
+                // checking respose in range of okay
+                if (response.ok) {
+                    //Storeing User Info in localStorage
+                    if (data.user && data.user.id) { // Check if user data exists in response
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('userEmail', data.user.email);
+                        localStorage.setItem('userId', data.user.id);
+                        localStorage.setItem('userFirstName', data.user.firstName);
+
+                        console.log("Stored userId:", data.user.id); // For checkinh
+                        console.log("Stored userFirstName:", data.user.firstName);
+
+                        window.location.href = "index.html";
+                    } else {
+                         // Handle case where response was ok, but user data was missing (shouldn't happen with current backend)
+                         console.error("Login response OK, but user data missing in response:", data);
+                         alert("Login succeeded but couldn't retrieve user details. Please try again.");
+                    }
+                    // --- End Store User Info ---
+                }
+                // If response.ok is false, the backend message was already alerted above. No redirect happens.
+
+            } catch (error) {
+                // Handle network errors (server down, no connection) or JSON parsing errors
+                console.error("Login fetch/processing error:", error);
+                alert("Failed to connect to the server or process the response. Please check your connection and try again later.");
+            }
+        });
+    </script>
+</body>
+</html>

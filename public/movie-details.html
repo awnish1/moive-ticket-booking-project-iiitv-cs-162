@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Theaters & Showtimes</title> <link rel="stylesheet" href="movie-details.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styles for the full-width banner */
+        #movie-banner {
+            width: 100%;
+            height: 45vh; /* Adjust height as needed */
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            margin-bottom: 1.5rem; /* Space below banner */
+            position: relative; /* Needed for absolute positioning inside */
+            background-color: #111; /* Fallback background */
+        }
+
+        /* Keep other sections constrained */
+        .content-wrapper {
+             max-width: 1100px;
+             margin: 0 auto;
+             padding: 0 2rem; /* Add horizontal padding */
+        }
+
+        /* Back button positioned over banner */
+        .back-button-container {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            max-width: 1100px; /* Align with content */
+            margin: 0 auto; /* Center */
+            background: none; box-shadow: none;
+            padding: 1rem 2rem;
+            z-index: 10; /* Ensure it's above banner */
+        }
+        .back-button-container .back-btn { /* Style for visibility on banner */
+             color: white;
+             text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+
+        /* Styling for title/meta placed below banner */
+        #movie-title-meta {
+             text-align: center;
+             margin-bottom: 1.5rem;
+             padding: 1rem 0; /* Add some padding */
+        }
+         #movie-title-meta h1 {
+             color: #ffffff; font-size: 2.4em; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.2;
+         }
+         #movie-title-meta .info-meta {
+             color: #ccc; font-size: 0.95em; display: flex; justify-content: center; gap: 0.5rem 1rem; flex-wrap: wrap;
+         }
+         #movie-title-meta .info-meta span {
+             background-color: rgba(255, 255, 255, 0.1); padding: 0.25rem 0.6rem; border-radius: 4px; white-space: nowrap;
+         }
+
+        /* Ensure loading/error messages are visible */
+        .loading-message { color: #ccc; text-align: center; padding: 1.5rem; font-style: italic; }
+        .error-message { color: #e74c3c; font-weight: bold; text-align: center; padding: 1.5rem; }
+
+        /* Styles for theater list and fixed slots */
+        .theater-group { cursor: pointer; } /* Keep theaters clickable */
+        .theater-group:hover { background-color: rgba(255, 255, 255, 0.05); }
+        .theater-group.selected { /* Style for selected theater */
+            background-color: rgba(205, 140, 56, 0.1);
+            border-left: 4px solid #cd8c38;
+         }
+         /* Styling for fixed showtime buttons */
+         .fixed-showtime-slot {
+            background-color: #3f3f3f; color: #e8e8e8; border: 1px solid #5f5f5f;
+            padding: 0.6rem 1.1rem; border-radius: 5px; cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s; font-size: 1em; margin: 5px; display: inline-block;
+         }
+         .fixed-showtime-slot:hover { background-color: #555; transform: translateY(-1px); }
+         /* Style for selected fixed slot */
+         .fixed-showtime-slot.selected {
+             background-color: #cd8c38; color: #1e1f26; border-color: #b87b2a;
+             font-weight: bold; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); transform: none;
+         }
+         #fixed-showtimes-list { margin-top: 1rem; text-align: center; }
+         .showtimes-container { text-align: center; } /* Centers proceed button */
+
+    </style>
+</head>
+<body>
+    <div id="movie-banner">
+        <div class="back-button-container">
+            <a href="index.html" id="back-link" class="back-btn" aria-label="Back to movie list" style="display: none;">← Back to Movies</a>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+
+        <section id="movie-title-meta">
+             <p class="loading-message">Loading movie details...</p>
+        </section>
+
+        <section class="selection-container">
+            <div class="select-date">
+                <h2>Select Date</h2>
+                <div id="date-options"> <p class="loading-message">Loading dates...</p> </div>
+            </div>
+           <div class="select-lang-format">
+                <h2>Select Language & Format</h2>
+                 <div id="lang-format-options"> <p class="loading-message">Loading options...</p> </div>
+           </div>
+           <div class="select-location">
+                <h2>Select Location</h2>
+                <select id="location-select" name="location" aria-label="Select your location">
+                    <option value="">-- Choose a Location --</option>
+                    <option value="Patna">Patna</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Noida">Noida</option>
+                    <option value="Gurgaon">Gurgaon</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Gandhinagar">Gandhinagar</option>
+                   </select>
+           </div>
+        </section>
+
+        <section class="theater-display-container">
+            <h2 id="theater-display-heading">Available Theaters</h2>
+            <div id="theater-list">
+                <p id="theater-instructions">Select location above.</p>
+            </div>
+        </section>
+
+        <section class="showtimes-container" id="fixed-showtimes-container" style="display: none;"> <h2 id="showtimes-heading">Select Showtime Slot</h2>
+             <div id="fixed-showtimes-list">
+                 </div>
+             <button id="proceed-button" class="btn" style="margin-top: 1rem; display: none;">Proceed to Seat Selection</button>
+        </section>
+
+    </div> <script>
+    document.addEventListener('DOMContentLoaded',() =>{
+        // DOM Refs
+        const API_URL = 'http://localhost:3000';
+        const bannerEl = document.getElementById('movie-banner');
+        const titleEl = document.getElementById('movie-title-meta');
+        const dateEl = document.getElementById('date-options');
+        const langEl = document.getElementById('lang-format-options');
+        const locSelEl = document.getElementById('location-select');
+        const thListEl = document.getElementById('theater-list');
+        const thInstrEl = document.getElementById('theater-instructions');
+        const slotContEl = document.getElementById('fixed-showtimes-container');
+        const slotListEl = document.getElementById('fixed-showtimes-list');
+        const procBtn = document.getElementById('proceed-button');
+        const backLnk = document.getElementById('back-link');
+
+        // State Vars
+        let selMovie = null;
+        let selDate = null;
+        let selLang = null;
+        let selFmt = null;
+        let selLoc = null;
+        let selThId = null;
+        let selSlot = null;
+
+        async function loadLocations() {
+    try {
+        const res = await fetch(`${API_URL}/api/theaters/locations`);
+
+        if (!res.ok) {
+            throw new Error("Failed to load locations");
+        }
+
+        const locations = await res.json();
+
+        locSelEl.innerHTML = '<option value="">-- Choose a Location --</option>';
+
+        locations.forEach(location => {
+            const option = document.createElement("option");
+            option.value = location;
+            option.textContent = location;
+            locSelEl.appendChild(option);
+        });
+
+    } catch (err) {
+        console.error(err);
+        locSelEl.innerHTML = '<option value="">Unable to load locations</option>';
+    }
+}
+
+        // Fixed Slots
+        const SHOWTIMES = [
+            { label: "9:00 AM - 12:00 PM", value: "Morning" },
+            { label: "1:00 PM - 5:00 PM", value: "Afternoon" },
+            { label: "8:00 PM - 11:00 PM", value: "Evening" }
+        ];
+
+        // Init Setup
+        const prms = new URLSearchParams(window.location.search);
+        const mId = prms.get('id');
+        if (!mId) { showErr("Error: Movie ID missing.", document.body); return; }
+        backLnk.href = `index.html`;
+        backLnk.style.display = 'inline-block';
+
+        // Core Funcs
+        async function loadMovie() {
+            showLoadMsg("Loading movie details...", titleEl);
+            try {
+                const res = await fetch(`${API_URL}/api/movies/${mId}`);
+                if (!res.ok) {
+                    const errTxt = await res.text();
+                    throw new Error(`Server error (${res.status}): ${errTxt}`);
+                }
+                selMovie = await res.json();
+                if (!selMovie) throw new Error("Movie data not found.");
+
+                showMovie(selMovie);
+                mkDateBtns();
+                mkLangBtns(selMovie.languages, selMovie.formats);
+            } catch (error) {
+                 showErr(`Could not load movie details: ${error.message}`, titleEl);
+                 console.error("Error fetching movie details:", error);
+                 langEl.innerHTML = '<p class="error-message">Cannot load options.</p>';
+                 dateEl.innerHTML = '<p class="error-message">Cannot load dates.</p>';
+            }
+        }
+
+        function showMovie(mov) {
+            titleEl.innerHTML = '';
+            const t = mov.title || 'Untitled Movie';
+            document.title = `Theaters for ${t}`;
+            const bSrc = mov.bannerUrl || mov.imageUrl || '';
+            bannerEl.style.backgroundImage = bSrc ? `url('${bSrc}')` : 'none';
+            if (!bSrc) bannerEl.style.backgroundColor = '#222';
+
+            const dur = mov.duration || '--';
+            const cert = mov.certification || 'N/A';
+            const rStr = typeof mov.rating === 'number' ? `${mov.rating.toFixed(1)}/10` : 'N/A';
+
+            titleEl.innerHTML = `<h1>${t}</h1><div class="info-meta"><span>${dur}</span> | <span>${cert}</span> | <span>Rating: ${rStr}</span></div>`;
+        }
+
+        function mkDateBtns() {
+             dateEl.innerHTML = '';
+             const td = new Date();
+             for (let i = 0; i < 7; i++) {
+                 const dt = new Date(td); dt.setDate(td.getDate() + i);
+                 const y = dt.getFullYear();
+                 const m = String(dt.getMonth() + 1).padStart(2, '0');
+                 const d = String(dt.getDate()).padStart(2, '0');
+                 const dtStr = `${y}-${m}-${d}`;
+                 const dName = dt.toLocaleDateString('en-US', { weekday: 'short' });
+                 const dNum = dt.getDate();
+                 const b = document.createElement('button');
+                 b.className = 'date-btn'; b.dataset.date = dtStr;
+                 b.innerHTML = `${dName}<br>${dNum}`;
+                 b.setAttribute('aria-label', `Select date ${dt.toLocaleDateString()}`);
+                 b.addEventListener('click', onDateSel);
+                 if (i === 0) {
+                     b.classList.add('active');
+                     selDate = dtStr;
+                 }
+                 dateEl.appendChild(b);
+             }
+        }
+
+        function mkLangBtns(langs = [], fmts = []) {
+             langEl.innerHTML = '';
+             if (!langs || langs.length === 0 || !fmts || fmts.length === 0) {
+                 langEl.innerHTML = '<p>No viewing options available.</p>'; return;
+             }
+             let firstOpt = true;
+             langs.forEach(l => { fmts.forEach(f => {
+                 const b = document.createElement('button'); b.className = 'lang-format-btn';
+                 b.textContent = `${l} - ${f}`;
+                 b.dataset.language = l; b.dataset.format = f;
+                 b.setAttribute('aria-label', `Select ${l} ${f}`);
+                 b.addEventListener('click', onLangSel);
+                 if (firstOpt) {
+                     b.classList.add('active');
+                     selLang = l;
+                     selFmt = f;
+                     firstOpt = false;
+                 }
+                 langEl.appendChild(b);
+             }); });
+        }
+
+        // Event Handlers
+        function onDateSel(ev) {
+            selDate = ev.currentTarget.dataset.date;
+            document.querySelectorAll('#date-options .date-btn.active').forEach(b => b.classList.remove('active'));
+            ev.currentTarget.classList.add('active');
+            clrSlots(); // Clear Fixed Showtimes
+            selSlot = null;
+            procBtn.style.display = 'none';
+        }
+
+        function onLangSel(ev) {
+            selLang = ev.currentTarget.dataset.language;
+            selFmt = ev.currentTarget.dataset.format;
+            document.querySelectorAll('#lang-format-options .lang-format-btn.active').forEach(b => b.classList.remove('active'));
+            ev.currentTarget.classList.add('active');
+            clrSlots(); // Clear Fixed Showtimes
+            selSlot = null;
+            procBtn.style.display = 'none';
+        }
+
+        locSelEl.addEventListener('change', (ev) => {
+             selLoc = ev.target.value;
+             clrThSel(); // Clear Theater Selection
+             clrSlots(); // Clear Fixed Showtimes
+             if(selLoc) {
+                 getThIfNeeded(); // Fetch Relevant Theaters If Ready
+             } else {
+                 clrTh(); // Clear Theaters
+                 thInstrEl.textContent = "Please select location.";
+             }
+        });
+
+        function onTheaterSel(ev) {
+             const thGrp = ev.target.closest('.theater-group');
+             if (!thGrp) return;
+             selThId = thGrp.dataset.theaterId;
+             selSlot = null; // Reset slot selection
+             document.querySelectorAll('#theater-list .theater-group.selected').forEach(dv => dv.classList.remove('selected'));
+             thGrp.classList.add('selected');
+             showSlots(); // Display Fixed Showtime Slots
+        }
+
+        function onSlotSel(ev) {
+             const slotBtn = ev.currentTarget;
+             selSlot = slotBtn.dataset.slotValue;
+             document.querySelectorAll('#fixed-showtimes-list .fixed-showtime-slot.selected').forEach(b => b.classList.remove('selected'));
+             slotBtn.classList.add('selected');
+             procBtn.style.display = 'inline-block';
+        }
+
+        procBtn.addEventListener('click', async () => {
+            if (!selMovie || !selThId || !selLang || !selFmt || !selDate || !selSlot) {
+                alert("Please ensure all selections are made."); return;
+            }
+            const bookData = {
+                movieId: selMovie._id, theaterId: selThId, language: selLang,
+                format: selFmt, bookingDate: selDate, showtimeSlot: selSlot,
+            };
+            const urlPrms = new URLSearchParams({
+                movieId: bookData.movieId, theaterId: bookData.theaterId,
+                date: bookData.bookingDate, slot: bookData.showtimeSlot,
+                lang: bookData.language, format: bookData.format,
+                movieTitle: encodeURIComponent(selMovie.title || 'Movie'),
+                theaterName: encodeURIComponent(document.querySelector(`.theater-group[data-theater-id="${selThId}"] h3`)?.textContent || 'Theater')
+            }).toString();
+            window.location.href = `seating.html?${urlPrms}`;
+        });
+
+        // Fetch Theaters Logic
+        function getThIfNeeded() {
+            if (selLoc) {
+                const p = { selectedLocation: selLoc };
+                getTh(p); // Fetch Relevant Theaters
+            } else {
+                clrTh();
+                thInstrEl.textContent = "Select location above.";
+            }
+        }
+
+        async function getTh(prms) {
+            showLoadMsg("Loading relevant theaters...", thListEl);
+            thInstrEl.style.display = 'none';
+            clrSlots(); // Clear Fixed Showtimes
+            const qryPrms = new URLSearchParams(prms);
+            const url = `${API_URL}/api/theaters/relevant?${qryPrms.toString()}`;
+            try {
+                const res = await fetch(url);
+                if (!res.ok) {
+                    const errTxt = await res.text();
+                    throw new Error(`Server error (${res.status}): ${errTxt}`);
+                }
+                const ths = await res.json();
+                showTh(ths); // Display Relevant Theaters
+            } catch (error) {
+                 showErr(`Could not load theaters: ${error.message}`, thListEl);
+                 console.error("Error fetching theaters:", error);
+            }
+        }
+
+        function showTh(ths) {
+             thListEl.innerHTML = '';
+             if (!ths || ths.length === 0) {
+                 thListEl.innerHTML = '<p class="message">No theaters found.</p>'; return;
+             }
+             ths.forEach(th => {
+                 const dv = document.createElement('div');
+                 dv.className = 'theater-group';
+                 dv.dataset.theaterId = th._id;
+                 dv.setAttribute('role', 'button'); dv.setAttribute('tabindex', '0');
+                 dv.innerHTML = `<h3>${th.name || 'Unknown Theater'}</h3>${th.address ? `<p class="theater-address">${th.address}</p>` : ''}`;
+                 dv.addEventListener('click', onTheaterSel);
+                 dv.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTheaterSel(e); } });
+                 thListEl.appendChild(dv);
+             });
+        }
+
+        // Display Slots Func
+        function showSlots() { // Renamed from displayFixedShowtimeSlots
+             slotListEl.innerHTML = '';
+             SHOWTIMES.forEach(slt => {
+                 const b = document.createElement('button');
+                 b.className = 'fixed-showtime-slot';
+                 b.textContent = slt.label;
+                 b.dataset.slotValue = slt.value;
+                 b.setAttribute('aria-label', `Select slot ${slt.label}`);
+                 b.addEventListener('click', onSlotSel); // Use renamed handler
+                 slotListEl.appendChild(b);
+             });
+             slotContEl.style.display = 'block';
+             procBtn.style.display = 'none'; // Hide proceed until slot selected
+        }
+
+        // Utils
+        function showLoadMsg(msg, cont) { if(cont) cont.innerHTML = `<p class="loading-message">${msg}</p>`; }
+        function showErr(msg, cont) { if(cont) cont.innerHTML = `<p class="error-message">${msg}</p>`; }
+
+        function clrTh() { // Clear Theaters
+            thListEl.innerHTML = '';
+            thInstrEl.textContent = "Select location above.";
+            thInstrEl.style.display = 'block';
+            clrSlots(); // Clear Fixed Showtimes
+        }
+        function clrThSel() { // Clear Theater Selection
+             document.querySelectorAll('#theater-list .theater-group.selected').forEach(dv => dv.classList.remove('selected'));
+             selThId = null;
+             clrSlots(); // Clear Fixed Showtimes
+        }
+        function clrSlots() { // Clear Fixed Showtimes
+             slotListEl.innerHTML = '';
+             slotContEl.style.display = 'none';
+             procBtn.style.display = 'none';
+             selSlot = null; // Reset selected slot state
+        }
+
+        // Initial Load
+        loadMovie();
+        loadLocations();
+
+    }); // End DOMContentLoaded
+    </script>
+</body>
+</html>
