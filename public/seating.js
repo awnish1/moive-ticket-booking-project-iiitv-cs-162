@@ -1,7 +1,7 @@
 //Main work:- making responsive seating
 document.addEventListener('DOMContentLoaded',()=>{
-    const API_URL='http://localhost:3000'; // API ka base address
-    const SEAT_PRICE=250; // Ek seat ka fixed daam
+    const API_URL='https://movie-mania-cmg2.onrender.com'; // API ka base address
+    const SEAT_PRICE=250; // Ek seat ka fixed
 
     //DOM 
     const titleEl=document.getElementById('movie-title');

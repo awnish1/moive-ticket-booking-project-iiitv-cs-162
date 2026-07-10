@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Config ---
-    const API_BASE_URL = 'http://localhost:3000';
+    const API_BASE_URL = 'https://movie-mania-cmg2.onrender.com';
 
     // --- DOM Elements ---
     const loadingMsgEl = document.getElementById('loading-message');
