@@ -295,5 +295,5 @@ app.get("/api/bookings/:bookingId", async (req, res) => {
     }
 });
 app.listen(port, () => {
-    console.log(`Server is Running and Listening at http://localhost:${port}`);
+    console.log(`Server is Running and Listening at ${port}`);
 });
